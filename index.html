@@ -8,19 +8,34 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/styles.css" />
   </head>
   <body>
-    <section class="page-header">
-      <h1 class="project-name">Bphysics</h1>
-      <h2 class="project-tagline">Ball physics</h2>
-      <a href="https://github.com/ampawd/bphysics" class="btn">View on GitHub</a>
-      <a href="https://github.com/ampawd/bphysics/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/ampawd/bphysics/tarball/master" class="btn">Download .tar.gz</a>
-    </section>
-
     <section class="main-content">
       <h3>
 <a id="ball-physics-demo-page" class="anchor" href="#ball-physics-demo-page" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ball physics demo page</h3>
+
+
+		<div id="canvas_container">
+			<div id="params">				
+				<b>Set angles:</b>
+				min				
+				<input type="text" id="angle_input_min" />
+				max				
+				<input type="text" id="angle_input_max" />
+				Set speed				
+				<input type="text" id="speed_input" />
+			</div>	
+			<div id="start_stop">
+				<button id='start'>start</button>
+				<button id='again'>again</button>
+			</div>
+			
+			<canvas id="main-canvas" width="1000" height="800"></canvas>
+		</div>
+
+		<script type="text/javascript" src="js/main.js"></script>
+
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/ampawd/bphysics">Bphysics</a> is maintained by <a href="https://github.com/ampawd">ampawd</a>.</span>

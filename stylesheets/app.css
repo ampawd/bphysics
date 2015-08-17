@@ -1,0 +1,33 @@
+body { 
+	margin: 0;
+	padding: 0;
+}
+	
+#canvas_container { 
+	width: 1000px;
+	height: 800px;
+	margin: 0 auto;	
+}
+	
+#main-canvas {	
+	border: 1px solid black;
+	margin: 0 auto;
+}
+
+#params {					
+	float: left;
+}
+
+#start_stop {
+	width: 200px;
+	float: right;
+	text-align: right;				
+}
+
+#params, #start_stop {
+	margin: 15px 0;
+}
+
+#angle_input_min, #angle_input_max, #speed_input {
+	width: 100px;
+}

@@ -31,3 +31,7 @@ body {
 #angle_input_min, #angle_input_max, #speed_input {
 	width: 100px;
 }
+
+* {
+	box-sizing: none;
+}

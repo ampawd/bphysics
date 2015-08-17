@@ -33,5 +33,5 @@ body {
 }
 
 * {
-	box-sizing: content-box;
+	box-sizing: content-box !important;
 }

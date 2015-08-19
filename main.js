@@ -1,4 +1,4 @@
-;(function() {
+(function() {
 	window.requestAnimFrame = (function(callback) {
 		return window.requestAnimationFrame 
 				|| window.webkitRequestAnimationFrame
@@ -6,33 +6,40 @@
 				|| window.oRequestAnimationFrame 
 				|| window.msRequestAnimationFrame
 				|| function(callback) {
-						window.setTimeout(callback, 1000 / 60);
+							window.setTimeout(callback, 1000 / 60)
 					 };
 	})();
 	
 	//	globals
-	var canvas = document.getElementById('main-canvas'),
-			ctx = canvas.getContext('2d'),
+	var canvas = $('#main-canvas'),
+			ctx = canvas[0].getContext('2d'),
 			
-			canvasWidth = canvas.width,
-			canvasHeight = canvas.height,
+			canvasWidth = $(canvas).attr("width"),
+			canvasHeight = $(canvas).attr("height"),
 			
 			animParams = {animIntervalId: 0},			
-			start = document.getElementById('start'),
-			again = document.getElementById('again'),			
+			run = $("#run"),	
 			
-			//	constant globals
+			//	default parameters
 			_GRAVITY = .52,
-			_FR =	.0085;
+			_FF =	0.0085,				//	fricion force
 			
-	
+			//	dampening factors
+			_DAMPFACTORX = .71,	
+			_DAMPFACTORY = .71,
+			
+			balls = [], 
+			numBalls = 7,
+			RADIUS = 20;
+			
+			
 	function Ball(x, y, r, vx, vy, color) {
 		this.x = x;
 		this.y = y;
 		this.r = r;
-		this.dampFactorX = .71;
-		this.dampFactorY = .71;
-		this.color = color ? color : "black";
+		this.dampFactorX = _DAMPFACTORX;
+		this.dampFactorY = _DAMPFACTORY;
+		this.color = color ? color : "blue";
 		
 		this.draw = function() {			
 			ctx.beginPath();
@@ -40,20 +47,121 @@
 			ctx.fillStyle = this.color;
 			ctx.fill();
 			ctx.closePath();
-			
-			// ctx.beginPath();
-			// ctx.moveTo(this.x, this.y);
-			// ctx.lineTo(this.x + this.r, this.y + this.r);
-			// ctx.lineWidth = 2;
-			// ctx.strokeStyle = '#fff';
-			// ctx.stroke();	
-			// ctx.closePath();
 		};
 	}	
+	
+	function setBallNumber(ball, i) {
+		ctx.font = RADIUS+"px arelia";
+		ctx.fillStyle = '#fff';
+		ctx.fillText(i+1, ball.x-5, ball.y+5);
+	}
 	
 	function randomArbitary(min, max) {
 		return Math.floor(Math.random() * (max - min + 1) + min);
 	}
+	
+	function createControls() {
+		//	angles
+		$(function() {
+			$( "#angles_slider" ).slider({
+				range: true,
+				min: 0,
+				max: 180,
+				values: [ 0, 180 ],
+				slide: function( event, ui ) {
+					$( "#angles_amount" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+				}
+			});
+			
+			$( "#angles_amount" ).val( $( "#angles_slider" ).slider( "values", 0 ) +
+				" - " + $( "#angles_slider" ).slider( "values", 1 ) );
+		});
+		
+		//	speed
+		$( "#speed_slider" ).slider({
+			range: "max",
+			min: 0,
+			max: 100,
+			step: 0.5,
+			value: 20,
+			slide: function( event, ui ) {
+				$( "#speed_amount" ).val( ui.value  );
+			}
+		});
+		$( "#speed_amount" ).val( $( "#speed_slider" ).slider( "value" ) );	
+		
+		//	gravity
+		$( "#gravity_slider" ).slider({
+			range: "max",
+			min: 0,
+			max: 1,
+			step: 0.01,
+			value: 0.52,
+			slide: function( event, ui ) {
+				$( "#gravity_amount" ).val( ui.value  );
+			}
+		});
+		$( "#gravity_amount" ).val( $( "#gravity_slider" ).slider( "value" ) );	
+		
+		//	fforce
+		$( "#ff_slider" ).slider({
+			range: "max",
+			min: 0,
+			max: 1,
+			step: 0.0001,
+			value: 0.0085,
+			slide: function( event, ui ) {
+				$( "#ff_amount" ).val( ui.value  );
+			}
+		});
+		$( "#ff_amount" ).val( $( "#ff_slider" ).slider( "value" ) );	
+		
+		//	dampening
+		$( "#dampening_slider" ).slider({
+			range: "max",
+			min: 0,
+			max: 1.0,
+			step: 0.01,
+			value: 0.71,
+			slide: function( event, ui ) {
+				$( "#dampening_amount" ).val( ui.value  );
+			}
+		});
+		$( "#dampening_amount" ).val( $( "#dampening_slider" ).slider( "value" ) );		
+		
+		//	numballs
+		$( "#numballs_slider" ).slider({
+			range: "max",
+			min: 1,
+			max: 100,
+			step: 1,
+			value: 7,
+			slide: function( event, ui ) {
+				numBalls = ui.value;	
+				$( "#numballs_amount" ).val( ui.value  );
+			}
+		});
+		$( "#numballs_amount" ).val( $( "#numballs_slider" ).slider( "value" ) );	
+	}
+	
+	function controlsTopPanel() {
+		var paramms = $("#params");		
+		var val = -paramms.height() + $(".toggle").height();
+		$(paramms).css({"top": val});
+		var toggled = false;
+		
+		$("#toggle-button").click(function() {
+			if (!toggled) {
+				$(this).html("hide")
+			}	else {
+				$(this).html("Show parameters")
+			}
+			$(paramms).animate({
+				top: toggled ? val : -val/6
+			});
+			toggled = !toggled;
+		});
+	}	
 
 	function getRandomColor() {
 			var letters = '0123456789ABCDEF'.split('');
@@ -71,6 +179,13 @@
 		};
 	}
 	
+	function addScalar(v1, sum) {
+		return {
+			x: v1.x + sum,
+			y: v1.y + sum
+		};
+	}
+	
 	function subtract(v1, v2) {
 		return {
 			x: v1.x - v2.x,
@@ -78,7 +193,7 @@
 		};
 	}
 	
-	function vecMulFactor(v, factor) {
+	function multScalar(v, factor) {
 		return {
 			x: v.x * factor,
 			y: v.y * factor
@@ -113,14 +228,16 @@
 				v1t = dotProduct(ut, v1),
 				v2n = dotProduct(un, v2),
 				v2t = dotProduct(ut, v2),
-				temp; 
+				temp;
 				
-				temp = v1n;	v1n = v2n; v2n = temp;
+				temp = v1n;
+				v1n = v2n;
+				v2n = temp;
 				
-				v1n = vecMulFactor(un, v1n);
-				v2n = vecMulFactor(un, v2n);
-				v1t = vecMulFactor(ut, v1t);
-				v2t = vecMulFactor(ut, v2t);
+				v1n = multScalar(un, v1n);
+				v2n = multScalar(un, v2n);
+				v1t = multScalar(ut, v1t);
+				v2t = multScalar(ut, v2t);
 				
 				v1 = add(v1n, v1t);
 				v2 = add(v2n, v2t);
@@ -130,27 +247,34 @@
 				balls[i].vy = v1.y;
 				balls[j].vy = v2.y;
 				
-				balls[i].x += v1.x*1.3;
-				balls[j].x += v2.x*1.3;
+				
+				
+				// balls[i].x += v1.x*1.3;
+				// balls[j].x += v2.x*1.3;
 				// balls[i].y += v1.y*1.5;
 				// balls[j].y += v2.y*1.5;
 			}
 	}
 	
-	function bounces(balls, angles) {
+	function runPhysics(balls, angles) {
 		var ball;
 		animParams.animIntervalId = setInterval(function() {
 			ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+			
+			balls.sort(function(a, b) {
+				return a.x < b.x;
+			})
+			
 			for (var i = 0; i < balls.length; i++) {
 				ball = balls[i];
-				for (var j = i+1; j < balls.length; j++) {
+				for (var j = i+1; j < balls.length && balls[i].x + RADIUS > balls[j].x - RADIUS; j++) {
 					handleCollision(balls, i, j);
 				}
 							
 				ball.x += ball.vx;
 				ball.y += ball.vy;				
 				
-				ball.vx -= ball.vx * _FR;													//	friction power on x-axis
+				ball.vx -= ball.vx * _FF;													//	friction force on x-axis
 				ball.vy += _GRAVITY;															//	acceleration given by gravity
 				
 				if (ball.y + ball.r > canvasHeight || ball.y - ball.r < 0) {
@@ -159,7 +283,8 @@
 					}	else {
 						ball.y += ball.r - ball.y;
 					}
-					ball.vy = -ball.vy * ball.dampFactorY;					//	dampening effect on y-axis				
+					ball.vy = -ball.vy * ball.dampFactorY;					//	dampening effect on y-axis	
+					
 					if (Math.abs(ball.vy) <= 3.0) {									//	realistic dampening
 						ball.dampFactorY -= 0.05;					
 					}	
@@ -179,47 +304,59 @@
 					ball.vx = -ball.vx * ball.dampFactorX;
 				}				
 				
-				
-				ball.draw();				
+				ball.draw();
+				setBallNumber(balls[i], i);	
 			}
 		}, 25);		
 	}
-
 	
-	var numBalls = 7,
-			balls = [], 
-			RADIUS = 20;	
 	
-	for (var i = 0; i < numBalls; i++) {
-		balls.push( new Ball(-RADIUS*2 + ((i+1)*canvasWidth/numBalls), canvasHeight-RADIUS, RADIUS, 0, 0, getRandomColor()) );		
-		balls[i].draw();
+	function initialDraw(balls, numBalls, RADIUS) {	
+		balls.length = 0;
+		for (var i = 0; i < numBalls; i++) {
+			balls.push( new Ball(-RADIUS*2 + ((i+1)*canvasWidth/numBalls), 
+									canvasHeight-RADIUS,
+									RADIUS, 
+									0, 
+									0,
+									"#0FABC1") );		//	"#0FABC1"
+			balls[i].draw();
+			setBallNumber(balls[i], i);
+		}
 	}
 	
-	function onStartClicked(e) {
-		var speed			= parseInt(document.getElementById("speed_input").value),
-				alpha_min = parseInt(document.getElementById("angle_input_min").value),
-				alpha_max = parseInt(document.getElementById("angle_input_max").value);
+	var clicked = false;
+	function onRunClicked(e) {		
+		initialDraw(balls, numBalls, RADIUS);
+		var speed			= parseInt($( "#speed_amount" ).val()),
+				alpha_min = parseInt($( "#angles_slider" ).slider( "values", 0 )),
+				alpha_max = parseInt($( "#angles_slider" ).slider( "values", 1 )),
+				newGravity = parseFloat($( "#gravity_amount" ).val()),
+				newFF = parseFloat($("#ff_amount").val()),
+				newDAMPFACTOR = parseFloat($( "#dampening_amount" ).val());
 				
-		if (typeof speed === 'undefined' || typeof alpha_max === 'undefined' 
-			|| typeof alpha_min === undefined 
-			|| isNaN(speed) || isNaN(alpha_min)
-			|| isNaN(alpha_max)) {
-			alert("Please specify speed and angles ... ");
-			return;		
-		}
+				_GRAVITY = newGravity == _GRAVITY ? _GRAVITY : newGravity;	
+				_FF = newFF == _FF ? _FF : newFF;	
+				
+				_DAMPFACTORX = newDAMPFACTOR;
+				_DAMPFACTORY = newDAMPFACTOR;
 		
 		var angles = [];
 		for (var i = 0; i < balls.length; i++) {			
 			angles.push( [randomArbitary(alpha_min, alpha_max), randomArbitary(alpha_min, alpha_max)] );
 			balls[i].vx = Math.cos( angles[i][0]*Math.PI/180 )*speed;
-			balls[i].vy = Math.sin( angles[i][1]*Math.PI/180 )*speed;					
+			balls[i].vy = Math.sin( angles[i][1]*Math.PI/180 )*speed;		
+			balls[i].dampFactorX = _DAMPFACTORX;	
+			balls[i].dampFactorY = _DAMPFACTORY;	
 			balls[i].draw();			
 		}		
 		
-		bounces(balls, angles);
-		
-		this.onclick = null;
-		again.onclick = function() {
+		if (!clicked) {
+			$(this).html("Stop");
+			runPhysics(balls, angles);	
+			
+		} else {
+			$(this).html("Run");
 			if (animParams.animIntervalId) {
 				ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 				clearInterval(animParams.animIntervalId);
@@ -230,15 +367,24 @@
 					ball.y = canvasHeight-ball.r;
 					ball.vx = Math.cos(randomArbitary(alpha_min, alpha_max)*Math.PI/180)*speed;
 					ball.vy = Math.sin(randomArbitary(alpha_min, alpha_max)*Math.PI/180)*speed;						
-					ball.dampFactorY = .71;
-					ball.dampFactorX = .71;
-					//ball.color = getRandomColor();
-					balls[i].draw();	
+					ball.dampFactorX = _DAMPFACTORX;
+					ball.dampFactorY = _DAMPFACTORY;
+					balls[i].draw();
+					setBallNumber(balls[i], i);
 				}
 			}
-			start.onclick = onStartClicked;
-		};		
+		}
+		clicked = !clicked;			
 	};
 	
-	start.onclick = onStartClicked;	
+	function setHandlers( ) {		
+		$(run).click(onRunClicked);	
+	}	
+	
+	
+	createControls();
+	controlsTopPanel();
+	setHandlers();
+	initialDraw(balls, numBalls, RADIUS);
+	
 }());

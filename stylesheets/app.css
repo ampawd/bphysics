@@ -14,24 +14,46 @@ body {
 	margin: 0 auto;
 }
 
-#params {					
-	float: left;
+#params {	
+	position: absolute;
+	width: 300px;
+	padding-left: 10px;
+	z-index: 999999;
 }
 
-#start_stop {
-	width: 200px;
+#run_stop {
+	width: 125px;
 	float: right;
 	text-align: right;				
 }
 
-#params, #start_stop {
+#params, #run_stop {
 	margin: 15px 0;
 }
 
-#angle_input_min, #angle_input_max, #speed_input {
-	width: 100px;
+.control {
+	margin-top: 10px;
+	width: 300px;
 }
 
-* {
-	box-sizing: content-box !important;
+.toggle {
+	margin-top: 20px;
+}
+
+.control-input-cont {	
+	float: right;	
+}
+
+.slider {
+	display: inline-block;
+	width: 50px;
+	vertical-align: middle;
+}
+
+.control-input {
+	width: 100px;
+	border: 0;
+	color: #f6931f;
+	font-weight:bold;
+	margin-left: 15px;
 }

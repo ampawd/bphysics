@@ -1,38 +1,93 @@
-<!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="UTF-8">
-    <title>Bphysics by ampawd</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/app.css" />
-  </head>
-  <body>
-    <section class="main-content">
-      <h3>
-<a id="ball-physics-demo-page" class="anchor" href="#ball-physics-demo-page" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ball physics demo page</h3>
-	<div id="canvas_container">
-		<div id="params">				
-			<b>Set angles:</b>
-			min				
-			<input type="text" id="angle_input_min" value="0" />
-			max				
-			<input type="text" id="angle_input_max" value="180" />
-			Set speed				
-			<input type="text" id="speed_input" value="25" />
-		</div>	
-		<div id="start_stop">
-			<button id='start'>start</button>
-			<button id='again'>again</button>
+<!doctype html>
+<html>
+	<head>
+		<title>| Ball physics</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		
+		<script src="lib/jquery.js"></script>
+		<script src="lib/jquery-ui.js"></script>
+	
+		<link href="styles.css" rel="stylesheet" type="text/css" />
+		<link href="lib/jquery-ui.css" rel="stylesheet" type="text/css" />
+			
+	</head>
+	<body>		
+		
+		<div id="canvas_container">
+			<div id="params">
+				<div class="control angles">
+					Angles	
+					<div class="control-input-cont">
+						<div id="angles_slider" class="slider"></div>
+						<span>
+							<input class="control-input" value="20" type="text" id="angles_amount" readonly />
+						</span>
+					</div>
+				</div>
+				
+				<div class="control speed">
+					Speed	
+					<div class="control-input-cont">
+						<div id="speed_slider" class="slider"></div>
+						<span>
+							<input class="control-input" value="20" type="text" id="speed_amount" readonly />
+						</span>
+					</div>			
+				</div>
+				
+				<div class="control gravity">
+					Gravity	
+					<div class="control-input-cont">
+						<div id="gravity_slider" class="slider"></div>
+						<span>
+							<input class="control-input" value="0.52" type="text" id="gravity_amount" readonly />
+						</span>
+					</div>
+				</div>	
+
+				<div class="control fforce">
+					Friction Force	
+					<div class="control-input-cont">
+						<div id="ff_slider" class="slider"></div>
+						<span>
+							<input class="control-input" value="0.0085" type="text" id="ff_amount" readonly />
+						</span>
+					</div>
+				</div>
+				
+				<div class="control dampening">
+					Dampening	
+					<div class="control-input-cont">
+						<div id="dampening_slider" class="slider"></div>
+						<span>
+							<input class="control-input" value="0.71" type="text" id="dampening_amount" readonly />
+						</span>
+					</div>
+				</div>	
+					
+				<div class="control numballs">
+					Num balls	
+					<div class="control-input-cont">
+						<div id="numballs_slider" class="slider"></div>
+						<span>
+							<input class="control-input" value="0.52" type="text" id="numballs_amount" readonly />
+						</span>
+				</div>
+			</div>
+			
+			<div class="control toggle">
+				<button id="toggle-button">Show parameters</button>
+			</div>
 		</div>
 		
-		<canvas id="main-canvas" width="1000" height="800"></canvas>
-		<span class="site-footer-owner"><a href="https://github.com/ampawd/bphysics">Bphysics</a> is maintained by <a href="https://github.com/ampawd">ampawd</a>.</span>
-	</div>
-	<script type="text/javascript" src="main.js"></script>
-    </section>
-  </body>
+			
+			<div id="run_stop">
+				<button id='run'>Run</button>
+			</div>
+			
+			<canvas id="main-canvas" width="1000" height="800"></canvas>
+		</div>
+
+		<script type="text/javascript" src="main.js"></script>
+	</body>
 </html>

@@ -218,10 +218,9 @@
 				c = dx*dx + dy*dy,
 				minDistance = balls[i].r + balls[j].r,				
 				v1 = {x: balls[i].vx, y: balls[i].vy},
-				v2 = {x: balls[j].vx, y: balls[j].vy};			
-				minDistance *= minDistance;
+				v2 = {x: balls[j].vx, y: balls[j].vy};
 			
-			if (c <= minDistance) {
+			if (c <= minDistance*minDistance) {
 				var un = normalize({x: dx, y: dy}),
 				ut = {x: -un.y, y: un.x},					
 				v1n = dotProduct(un, v1),		
@@ -247,12 +246,11 @@
 				balls[i].vy = v1.y;
 				balls[j].vy = v2.y;
 				
-				
-				
-				// balls[i].x += v1.x*1.3;
-				// balls[j].x += v2.x*1.3;
-				// balls[i].y += v1.y*1.5;
-				// balls[j].y += v2.y*1.5;
+				var vxa = Math.abs(v1.x) + Math.abs(v2.x);
+						
+				var overlapx = minDistance - Math.abs(balls[i].x - balls[j].x);				
+				balls[i].x += balls[i].vx / vxa * overlapx;
+				balls[j].x += balls[j].vx / vxa * overlapx;
 			}
 	}
 	

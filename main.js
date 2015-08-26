@@ -303,7 +303,7 @@
 				}				
 				
 				ball.draw();
-				setBallNumber(balls[i], i);	
+				//setBallNumber(balls[i], i);	
 			}
 		}, 25);		
 	}
@@ -319,7 +319,7 @@
 									0,
 									"#0FABC1") );		//	"#0FABC1"
 			balls[i].draw();
-			setBallNumber(balls[i], i);
+			//setBallNumber(balls[i], i);
 		}
 	}
 	
@@ -368,7 +368,7 @@
 					ball.dampFactorX = _DAMPFACTORX;
 					ball.dampFactorY = _DAMPFACTORY;
 					balls[i].draw();
-					setBallNumber(balls[i], i);
+					//setBallNumber(balls[i], i);
 				}
 			}
 		}

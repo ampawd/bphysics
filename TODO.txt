@@ -1,4 +1,0 @@
-fix parameters change issues
-
-Add circles dragging (or some other interactives)
-

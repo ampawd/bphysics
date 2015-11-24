@@ -271,8 +271,6 @@
 					handleBallsCollision(i, j);
 				}
 				ball.draw();
-				console.log("dampening = " + ball.dampFactorX);
-				console.log("ff = " + params.ff);
 			}
 		
 		}, 25);		

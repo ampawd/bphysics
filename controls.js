@@ -65,14 +65,18 @@ function controls(params, update) {
 	$( "#dampening_slider" ).slider({
 		range: "max",
 		min: 0.001,
-		max: 1.0,
+		max: 1,
 		step: 0.01,
 		value: 0.71,
 		slide: function( event, ui ) {
-			$( "#dampening_amount" ).val( ui.value < 0.002 ? 1 : 
-				(1.0 - ui.value).toFixed(4) < 0.019 ? 0 : (1.0 - ui.value).toFixed(4) );				
-			params.dampFactorX = ui.value;
-			params.dampFactorY = ui.value;
+			var a = ui.value < 0.002 ? 1 : 
+				(1.0 - ui.value).toFixed(4) < 0.019 ? 0 : (1.0 - ui.value).toFixed(4),
+				b = ui.value < 0.002 ? 0 : ui.value;
+				
+			$( "#dampening_amount" ).val( a );
+			
+			params.dampFactorX = b;
+			params.dampFactorY = b;
 			update();
 		}
 	});

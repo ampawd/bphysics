@@ -271,6 +271,8 @@
 					handleBallsCollision(i, j);
 				}
 				ball.draw();
+				//console.log("dmpx = " + ball.dampFactorX)
+				//console.log("dmpy = " + ball.dampFactorY)
 			}
 		
 		}, 25);		
@@ -299,10 +301,10 @@
 	var clicked = false;
 	function onRunClicked(e) {		
 		var newSpeed				= parseInt($( "#speed_amount" ).val()),
-				newGravity 			= parseFloat($( "#gravity_amount" ).val()),
-				newFF 					= parseFloat($("#ff_amount").val()),
-				newDmpFactor		= parseFloat($( "#dampening_amount" ).val()),
-				newNumParticles = parseInt($( "#particles_amount" ).val());		
+			newGravity 			= parseFloat($( "#gravity_amount" ).val()),
+			newFF 					= parseFloat($("#ff_amount").val()),
+			newDmpFactor		= parseFloat($( "#dampening_amount" ).val()),
+			newNumParticles = parseInt($( "#particles_amount" ).val());		
 		
 		if (!clicked) {
 			$(this).html("Stop");
@@ -350,13 +352,13 @@
 				params.angles.pop();
 			}
 		}
-		 
+		console.log("num balls = " + particles.length);
 		for (var i = 0; i < particles.length; i++) {
 			particles[i].vx = (particles[i].vx/Math.abs(particles[i].vx))*params.speed;
 			particles[i].vy = (particles[i].vy/Math.abs(particles[i].vy))*params.speed;
 			
-			particles[i].dampFactorX = params.dampFactorX;
-			particles[i].dampFactorY = params.dampFactorY;
+			particles[i].dampFactorX = params.dampFactorX == 0 ? 0.001 : params.dampFactorX;
+			particles[i].dampFactorY = params.dampFactorY == 0 ? 0.001 : params.dampFactorY;
 		}	
 		
 		

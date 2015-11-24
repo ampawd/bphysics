@@ -246,12 +246,12 @@
 						ball.y += ball.r - ball.y;
 					}
 					ball.vy = -ball.vy * ball.dampFactorY;					
-					/*if (ball.dampFactorY > 0.05)
+					if (ball.dampFactorY > 0.05)
 						ball.dampFactorY -= 0.01;
 					else {
 						if (params.gravity > 1)
 							params.gravity -= 0.5;
-					}*/	
+					}	
 				}
 				
 				if (ball.x + ball.r > canvasWidth || ball.x - ball.r < 0) {
@@ -261,12 +261,12 @@
 						ball.x += ball.r - ball.x;
 					}
 					ball.vx = -ball.vx*ball.dampFactorX;
-					/*if (ball.dampFactorX > 0.05)
+					if (ball.dampFactorX > 0.05)
 						ball.dampFactorX -= 0.01;
 					else {
 						if (params.ff >= 0)
 							params.ff -= 0.001;
-					}*/
+					}
 				}				
 				
 				for (var j = i+1; j < particles.length; j++) {

@@ -271,8 +271,8 @@
 					handleBallsCollision(i, j);
 				}
 				ball.draw();
-				console.log("dmpx = " + ball.dampFactorX)
-				console.log("dmpy = " + ball.dampFactorY)
+				//console.log("dmpx = " + ball.dampFactorX)
+				//console.log("dmpy = " + ball.dampFactorY)
 			}
 		
 		}, 25);		
@@ -357,8 +357,8 @@
 			particles[i].vx = (particles[i].vx/Math.abs(particles[i].vx))*params.speed;
 			particles[i].vy = (particles[i].vy/Math.abs(particles[i].vy))*params.speed;
 			
-			particles[i].dampFactorX = params.dampFactorX;
-			particles[i].dampFactorY = params.dampFactorY;
+			particles[i].dampFactorX = params.dampFactorX == 0 ? 0.001 : params.dampFactorX;
+			particles[i].dampFactorY = params.dampFactorY == 0 ? 0.001 : params.dampFactorY;
 		}	
 		
 		

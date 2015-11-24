@@ -1,0 +1,70 @@
+body { 
+	background: #ccc;
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+	position: absolute;
+}
+	
+#canvas_container { 
+	width: 90%;
+	height: 90%;
+	margin: 0 auto;	
+}
+	
+#main-canvas {	
+	background: #fff;
+	border: 1px solid black;
+	margin: 0 auto;
+}
+
+#params {	
+	position: absolute;
+	width: 300px;
+	padding-left: 10px;
+	z-index: 999999;
+}
+
+#run_stop {
+	width: 125px;
+	float: right;
+	text-align: right;				
+}
+
+#params, #run_stop, #physics_mode {
+	margin-top: 15px;
+	margin-bottom: 10px;
+}
+
+#physics_mode {
+	margin-left: 300px;
+	float: left;
+}
+
+.control {
+	margin-top: 10px;
+	width: 300px;
+}
+
+.toggle {
+	margin-top: 20px;
+}
+
+.control-input-cont {	
+	float: right;	
+}
+
+.slider {
+	display: inline-block;
+	width: 50px;
+	vertical-align: middle;
+}
+
+.control-input {
+	width: 100px;
+	border: 0;
+	color: #f6931f;
+	font-weight:bold;
+	margin-left: 15px;
+}

@@ -70,13 +70,11 @@ function controls(params, update) {
 		value: 0.71,
 		slide: function( event, ui ) {
 			var a = ui.value < 0.002 ? 1 : 
-				(1.0 - ui.value).toFixed(4) < 0.019 ? 0 : (1.0 - ui.value).toFixed(4),
-				b = ui.value < 0.002 ? 0 : ui.value;
-				
+				(1.0 - ui.value).toFixed(4) < 0.019 ? 0 : (1.0 - ui.value).toFixed(4);
+				//var b = ui.value < 0.002 ? 0 : ui.value;
 			$( "#dampening_amount" ).val( a );
-			
-			params.dampFactorX = b;
-			params.dampFactorY = b;
+			params.dampFactorX = ui.value;
+			params.dampFactorY = ui.value;
 		}
 	});
 	$( "#dampening_amount" ).val( $( "#dampening_slider" ).slider( "value" ) );		

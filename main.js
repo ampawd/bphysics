@@ -251,7 +251,7 @@
 						ball.dampFactorY -= 0.01;
 					else {
 						if (params.gravity > 1)
-						params.gravity -= 0.5;
+							params.gravity -= 0.5;
 					}	
 				}
 				
@@ -265,8 +265,9 @@
 					if (ball.dampFactorX > 0.05)
 						ball.dampFactorX -= 0.01;
 					else {
-						if (params.ff >= 0)
+						if (params.ff > 0) {
 							params.ff -= 0.001;
+						} else params.ff = 0;
 					}
 				}				
 				
@@ -356,7 +357,7 @@
 			}
 		}
 		 
-		for (var i = 0; i < params.numParticles; i++) {
+		for (var i = 0; i < particles.length; i++) {
 			particles[i].vx = (particles[i].vx/Math.abs(particles[i].vx))*params.speed;
 			particles[i].vy = (particles[i].vy/Math.abs(particles[i].vy))*params.speed;
 			

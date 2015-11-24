@@ -245,7 +245,7 @@
 					}	else {
 						ball.y += ball.r - ball.y;
 					}
-					ball.vy = -ball.vy * ball.dampFactorY;					
+					ball.vy = -ball.vy * ball.dampFactorY;
 					/*if (ball.dampFactorY > 0.05)
 						ball.dampFactorY -= 0.01;
 					else {

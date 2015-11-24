@@ -307,7 +307,7 @@
 			newNumParticles = parseInt($( "#particles_amount" ).val());		
 		
 		if (!clicked) {
-			$(this).html("Stop");
+			$(this).html("Pause");
 			balls();				
 		} else {
 			$(this).html("Continue");

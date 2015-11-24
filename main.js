@@ -352,7 +352,6 @@
 				params.angles.pop();
 			}
 		}
-		console.log("num balls = " + particles.length);
 		for (var i = 0; i < particles.length; i++) {
 			particles[i].vx = (particles[i].vx/Math.abs(particles[i].vx))*params.speed;
 			particles[i].vy = (particles[i].vy/Math.abs(particles[i].vy))*params.speed;

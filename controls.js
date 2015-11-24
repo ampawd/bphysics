@@ -75,6 +75,7 @@ function controls(params, update) {
 			$( "#dampening_amount" ).val( a );
 			params.dampFactorX = ui.value;
 			params.dampFactorY = ui.value;
+			update();
 		}
 	});
 	$( "#dampening_amount" ).val( $( "#dampening_slider" ).slider( "value" ) );		

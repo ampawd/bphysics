@@ -170,11 +170,7 @@
 					}	else {
 						ball.y += ball.r - ball.y;
 					}
-					ball.vy = -ball.vy * ball.dampFactorY;				
-
-					if (ball.dampFactorY > 0.05)
-						ball.dampFactorY -= 0.01;
-					
+					ball.vy = -ball.vy * ball.dampFactorY;					
 					if (params.gravity > 1)
 						params.gravity -= 0.5;						
 				}
@@ -185,12 +181,6 @@
 					} else {
 						ball.x += ball.r - ball.x;
 					}
-
-					ball.vx = -ball.vx*ball.dampFactorX;
-					if (ball.dampFactorX > 0.05)
-						ball.dampFactorX -= 0.01;
-								
-
 					ball.vx = -ball.vx*ball.dampFactorX;				
 					if (params.ff > 0) {
 						params.ff -= 0.001;
@@ -230,9 +220,9 @@
 	}
 	
 	var clicked = false;
-	function onRunClicked(e) {
+	function onRunClicked(e) {		
 		if (!clicked) {
-			$(this).html("Stop");
+			$(this).html("Pause");
 			balls();				
 		} else {
 			$(this).html("Continue");
@@ -306,6 +296,4 @@
 	
 	setHandlers();	
 	controlsSliding();
-
-
 }());

@@ -14,7 +14,17 @@
 	<body>		
 		
 		<div id="canvas_container">
-			<div id="params">				
+			<div id="params">
+<!-- 				<div class="control angles">
+					Angles	
+					<div class="control-input-cont">
+						<div id="angles_slider" class="slider"></div>
+						<span>
+							<input class="control-input" value="20" type="text" id="angles_amount" readonly />
+						</span>
+					</div>
+				</div> -->
+				
 				<div class="control speed">
 					Speed	
 					<div class="control-input-cont">
@@ -73,7 +83,15 @@
 			
 			<div id="run_stop">
 				<button id='run'>Run</button>
-			</div>			
+			</div>
+			
+<!-- 			<div id="physics_mode">
+				<select id='mode'>
+					<option>Molecules motion in gas</option>
+					<option>Balls bouncing</option>
+				</select>
+			</div> -->
+			
 			<canvas id="main-canvas"></canvas>
 		</div>
 

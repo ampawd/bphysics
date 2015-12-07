@@ -34,12 +34,12 @@ function controls(params, updateParticles) {
 	//	fforce
 	$( "#ff_slider" ).slider({
 		range: "max",
-		min: 0.001,
+		min: 0,
 		max: 0.1,
 		step: 0.0001,
 		value: 0.0085,
 		slide: function( event, ui ) {			
-			$( "#ff_amount" ).val( ui.value < 0.002 ? 0 : ui.value );
+			$( "#ff_amount" ).val( ui.value );
 			params.ff = ui.value;
 		}
 	});
@@ -49,13 +49,15 @@ function controls(params, updateParticles) {
 	//	dampening
 	$( "#dampening_slider" ).slider({
 		range: "max",
-		min: 0.001,
-		max: 1.0,
+		min: 0,
+		max: 1,
 		step: 0.01,
 		value: 0.51,
 		slide: function( event, ui ) {
-			$( "#dampening_amount" ).val( ui.value < 0.002 ? 1 : 
-				(1.0 - ui.value).toFixed(4) < 0.019 ? 0 : (1.0 - ui.value).toFixed(4) );				
+			var a = ui.value < 0.002 ? 1 : 
+				(1.0 - ui.value).toFixed(4) < 0.019 ? 0 : (1.0 - ui.value).toFixed(4);
+				//var b = ui.value < 0.002 ? 0 : ui.value;
+			$( "#dampening_amount" ).val( a );
 			params.dampFactorX = ui.value;
 			params.dampFactorY = ui.value;
 			updateParticles("dampening");
@@ -99,4 +101,4 @@ function controlsSliding() {
 		});
 		toggled = !toggled;
 	});
-}	
+}

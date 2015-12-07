@@ -11,12 +11,6 @@
 			
 			particles = [], 			
 			params = {
-				gravity: 			.52,
-				ff:						.0085,			
-				dampFactorX:	.71,	
-				dampFactorY:	.71,
-				speed:				15,
-				numParticles:	7,
 				radius:				16,
 				angles: 			[],
 				init: 				function() {
@@ -27,24 +21,27 @@
 			},
 			
 			degToRad = Math.PI/180,
-			radToDeg = 180/Math.PI,
-			
-			modes = ["molecules", "balls"],
-			currentMode = modes[0];
-			
-			params.init();
+			radToDeg = 180/Math.PI;
+	
+	function init() {
+		canvasWidth = canvas[0].parentNode.clientWidth;
+		canvasHeight = canvas[0].parentNode.clientHeight;		
+		canvas[0].width = canvasWidth;
+		canvas[0].height = canvasHeight;
+		params.init();
+	}
 	
 	function randomArbitary(min, max) {
 		return Math.floor(Math.random() * (max - min + 1) + min);
 	}
 
 	function getRandomColor() {
-			var letters = '0123456789ABCDEF'.split('');
-			var color = '#';
-			for (var i = 0; i < 6; i++ ) {
-				color += letters[Math.floor(Math.random() * 16)];
-			}
-			return color;
+		var letters = '0123456789ABCDEF'.split('');
+		var color = '#';
+		for (var i = 0; i < 6; i++ ) {
+			color += letters[Math.floor(Math.random() * 16)];
+		}
+		return color;
 	}	
 	
 	function Particle(x, y, r, vx, vy, dmpX, dmpY, color) {
@@ -61,6 +58,8 @@
 			ctx.arc(this.x, this.y, this.r, 0, 2*Math.PI, true);
 			ctx.fillStyle = this.color;
 			ctx.fill();
+			ctx.fillStyle = "#000";
+			ctx.stroke();
 			ctx.closePath();
 		};
 	}	
@@ -104,51 +103,6 @@
 				x: v.x*inv_l,
 				y: v.y*inv_l
 		};
-	} 
-	
-	function handleMoleculesCollision(i, j) {
-		var dx = particles[i].x - particles[j].x,
-				dy = particles[i].y - particles[j].y,
-				c = dx*dx + dy*dy,
-				minDistance = particles[i].r + particles[j].r,				
-				v1 = {x: particles[i].vx, y: particles[i].vy},
-				v2 = {x: particles[j].vx, y: particles[j].vy};			
-			
-			if (c <= minDistance*minDistance) {
-				var un = normalize({x: dx, y: dy}),
-				ut = {x: -un.y, y: un.x},					
-				v1n = dotProduct(un, v1),		
-				v1t = dotProduct(ut, v1),
-				v2n = dotProduct(un, v2),
-				v2t = dotProduct(ut, v2),
-				temp;
-				
-				temp = v1n;
-				v1n = v2n;
-				v2n = temp;
-				
-				v1n = multScalar(un, v1n);
-				v2n = multScalar(un, v2n);
-				v1t = multScalar(ut, v1t);
-				v2t = multScalar(ut, v2t);
-				
-				v1 = add(v1n, v1t);
-				v2 = add(v2n, v2t);
-				
-				particles[i].vx = v1.x;
-				particles[j].vx = v2.x;				
-				particles[i].vy = v1.y;
-				particles[j].vy = v2.y;					
-				
-				var overlap = minDistance - Math.abs(Math.sqrt(c)),
-						vxa = Math.abs(v1.x) + Math.abs(v2.x),
-						vya = Math.abs(v1.y) + Math.abs(v2.y);
-				
-				particles[i].x += particles[i].vx / vxa * overlap; 
-				particles[j].x += particles[j].vx / vxa * overlap; 
-				particles[i].y += particles[i].vy / vya * overlap; 
-				particles[j].y += particles[j].vy / vya * overlap;			
-			}
 	}
 	
 	function handleBallsCollision(i, j) {
@@ -185,50 +139,21 @@
 				particles[j].vx = v2.x;				
 				particles[i].vy = v1.y;
 				particles[j].vy = v2.y;	 	
+				
+				var overlap = minDistance - Math.abs(Math.sqrt(c)),
+				vxa = Math.abs(v1.x) + Math.abs(v2.x),
+				vya = Math.abs(v1.y) + Math.abs(v2.y);
+				
+				particles[i].x += particles[i].vx / vxa * overlap; 
+				particles[j].x += particles[j].vx / vxa * overlap; 
+				particles[i].y += particles[i].vy / vya * overlap; 
+				particles[j].y += particles[j].vy / vya * overlap;	
 			}
-	}
-	
-	function molecules() {
-		var molecule;
-		var timer = 25;
-		animParams.animIntervalId = setInterval(function() {
-			ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-			
-			for (var i = 0; i < particles.length; i++) {
-				molecule = particles[i];				
-				molecule.x += molecule.vx;
-				molecule.y += molecule.vy;
-				
-				if (molecule.y + molecule.r > canvasHeight || molecule.y - molecule.r < 0) {
-					if (molecule.y + molecule.r > canvasHeight) {
-						molecule.y -= molecule.y + molecule.r - canvasHeight;	
-					}	else {
-						molecule.y += molecule.r - molecule.y;
-					}					
-					molecule.vy = -molecule.vy;	
-				}
-				
-				if (molecule.x + molecule.r > canvasWidth || molecule.x - molecule.r < 0) {
-					if (molecule.x + molecule.r > canvasWidth) {
-						molecule.x -= molecule.x + molecule.r - canvasWidth;	
-					} else {
-						molecule.x += molecule.r - molecule.x;
-					}
-					molecule.vx = -molecule.vx;
-				}				
-				
-				for (var j = i+1; j < particles.length; j++) {
-					handleMoleculesCollision(i, j);
-				}
-				
-				molecule.draw();
-			}
-		}, timer);		
 	}
 
 	function balls() {
 		var ball;
-		animParams.animIntervalId = setInterval(function() {
+		function render() {
 			ctx.clearRect(0, 0, canvasWidth, canvasHeight);			
 			for (var i = 0; i < particles.length; i++) {
 				ball = particles[i];							
@@ -245,13 +170,13 @@
 					}	else {
 						ball.y += ball.r - ball.y;
 					}
-					ball.vy = -ball.vy * ball.dampFactorY;					
+					ball.vy = -ball.vy * ball.dampFactorY;				
+
 					if (ball.dampFactorY > 0.05)
 						ball.dampFactorY -= 0.01;
-					else {
-						if (params.gravity > 1)
-						params.gravity -= 0.5;
-					}	
+					
+					if (params.gravity > 1)
+						params.gravity -= 0.5;						
 				}
 				
 				if (ball.x + ball.r > canvasWidth || ball.x - ball.r < 0) {
@@ -260,22 +185,28 @@
 					} else {
 						ball.x += ball.r - ball.x;
 					}
+
 					ball.vx = -ball.vx*ball.dampFactorX;
 					if (ball.dampFactorX > 0.05)
 						ball.dampFactorX -= 0.01;
-					else {
-						if (params.ff >= 0)
-							params.ff -= 0.001;
+								
+
+					ball.vx = -ball.vx*ball.dampFactorX;				
+					if (params.ff > 0) {
+						params.ff -= 0.001;
+					} else {
+						params.ff = 0;					
 					}
-				}				
+				}
 				
 				for (var j = i+1; j < particles.length; j++) {
 					handleBallsCollision(i, j);
 				}
 				ball.draw();
 			}
-		
-		}, 25);		
+			animParams.animIntervalId = requestAnimationFrame(render);
+		}
+		animParams.animIntervalId = requestAnimationFrame(render);		
 	}	
 	
 	function createParticles(callback) {
@@ -299,23 +230,16 @@
 	}
 	
 	var clicked = false;
-	function onRunClicked(e) {		
-		var newSpeed				= parseInt($( "#speed_amount" ).val()),
-				newGravity 			= parseFloat($( "#gravity_amount" ).val()),
-				newFF 					= parseFloat($("#ff_amount").val()),
-				newDmpFactor		= parseFloat($( "#dampening_amount" ).val()),
-				newNumParticles = parseInt($( "#particles_amount" ).val());		
-		
+	function onRunClicked(e) {
 		if (!clicked) {
 			$(this).html("Stop");
 			balls();				
 		} else {
 			$(this).html("Continue");
 			if (animParams.animIntervalId) {
-				clearInterval(animParams.animIntervalId);				
+				cancelAnimationFrame(animParams.animIntervalId);				
 			}
-		}
-		
+		}	
 		clicked = !clicked;			
 	};
 	
@@ -327,59 +251,61 @@
 				a.draw();
 			});			
 		});
-	}	
-	
-	controls(params, function() {
-		if (params.numParticles > particles.length) {
-			var i = particles.length;
-			while (particles.length < params.numParticles) {
-				params.angles.push( [randomArbitary(0, 180), randomArbitary(0, 180)] );
-				particles.push(
-					new Particle(
-					randomArbitary(2*params.radius, canvasWidth), 
-					randomArbitary(2*params.radius, canvasHeight),
-					params.radius, 
-					Math.cos( params.angles[i][0]*degToRad ) * params.speed, 
-					Math.sin( params.angles[i++][1]*degToRad ) * params.speed,
-					params.dampFactorX,
-					params.dampFactorY,
-					getRandomColor()) //	"#0FABC1"
-				)
-			} 
-		} else if (params.numParticles < particles.length) {
-			while (particles.length > params.numParticles) {
-				particles.pop();
-				params.angles.pop();
-			}
-		}
-		 
-		for (var i = 0; i < params.numParticles; i++) {
-			particles[i].vx = (particles[i].vx/Math.abs(particles[i].vx))*params.speed;
-			particles[i].vy = (particles[i].vy/Math.abs(particles[i].vy))*params.speed;
-			
-			particles[i].dampFactorX = params.dampFactorX;
-			particles[i].dampFactorY = params.dampFactorY;
-		}	
-		
-		
-	});
-	
-	function init() {
-		canvasWidth = canvas[0].parentNode.clientWidth;
-		canvasHeight = canvas[0].parentNode.clientHeight;
-		
-		canvas[0].width = canvasWidth;
-		canvas[0].height = canvasHeight;
+		controlsSliding();
 	}
 	
+	//	separate each parameter updating from others
+	controls(params, function(param) {
+		switch(param) {
+			case "numBalls":
+				if (params.numParticles > particles.length) {
+					var i = particles.length;
+					while (particles.length < params.numParticles) {
+						params.angles.push( [randomArbitary(0, 180), randomArbitary(0, 180)] );
+						particles.push(
+							new Particle(
+							randomArbitary(2*params.radius, canvasWidth), 
+							randomArbitary(2*params.radius, canvasHeight),
+							params.radius, 
+							Math.cos( params.angles[i][0]*degToRad ) * params.speed, 
+							Math.sin( params.angles[i++][1]*degToRad ) * params.speed,
+							params.dampFactorX,
+							params.dampFactorY,
+							getRandomColor()) //	"#0FABC1"
+						)
+					} 
+				} else if (params.numParticles < particles.length) {
+					while (particles.length > params.numParticles) {
+						particles.pop();
+						params.angles.pop();
+					}
+				}				
+			break;
+			case "speed":
+				for (var i = 0; i < particles.length; i++) {
+					particles[i].vx = (particles[i].vx/Math.abs(particles[i].vx))*params.speed;
+					particles[i].vy = (particles[i].vy/Math.abs(particles[i].vy))*params.speed;
+				}		
+			break;
+			case "dampening":
+				for (var i = 0; i < particles.length; i++) {
+					particles[i].dampFactorX = params.dampFactorX == 0 ? 0.001 : params.dampFactorX;
+					particles[i].dampFactorY = params.dampFactorY == 0 ? 0.001 : params.dampFactorY;
+				}
+			break;
+			case "undefined":
+				return;
+		}	
+	});	
+	
 	init();
-	controlsSliding();
-	setHandlers();
 	
 	createParticles(function(a) {
-		//	on each particle init
 		a.draw();
-	});
+	});	
 	
+	setHandlers();	
+	controlsSliding();
+
 
 }());

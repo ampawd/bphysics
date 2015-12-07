@@ -14,23 +14,13 @@
 	<body>		
 		
 		<div id="canvas_container">
-			<div id="params">
-<!-- 				<div class="control angles">
-					Angles	
-					<div class="control-input-cont">
-						<div id="angles_slider" class="slider"></div>
-						<span>
-							<input class="control-input" value="20" type="text" id="angles_amount" readonly />
-						</span>
-					</div>
-				</div> -->
-				
+			<div id="params">				
 				<div class="control speed">
 					Speed	
 					<div class="control-input-cont">
 						<div id="speed_slider" class="slider"></div>
 						<span>
-							<input class="control-input" value="5" type="text" id="speed_amount" readonly />
+							<input class="control-input" type="text" id="speed_amount" readonly />
 						</span>
 					</div>			
 				</div>
@@ -40,7 +30,7 @@
 					<div class="control-input-cont">
 						<div id="gravity_slider" class="slider"></div>
 						<span>
-							<input class="control-input" value="0.52" type="text" id="gravity_amount" readonly />
+							<input class="control-input" type="text" id="gravity_amount" readonly />
 						</span>
 					</div>
 				</div>	
@@ -50,7 +40,7 @@
 					<div class="control-input-cont">
 						<div id="ff_slider" class="slider"></div>
 						<span>
-							<input class="control-input" value="0.0085" type="text" id="ff_amount" readonly />
+							<input class="control-input" type="text" id="ff_amount" readonly />
 						</span>
 					</div>
 				</div>
@@ -60,7 +50,7 @@
 					<div class="control-input-cont">
 						<div id="dampening_slider" class="slider"></div>
 						<span>
-							<input class="control-input" value="0.71" type="text" id="dampening_amount" readonly />
+							<input class="control-input" type="text" id="dampening_amount" readonly />
 						</span>
 					</div>
 				</div>	
@@ -70,7 +60,7 @@
 					<div class="control-input-cont">
 						<div id="numparticles_slider" class="slider"></div>
 						<span>
-							<input class="control-input" value="15" type="text" id="particles_amount" readonly />
+							<input class="control-input" type="text" id="particles_amount" readonly />
 						</span>
 					</div>
 				</div>
@@ -83,15 +73,7 @@
 			
 			<div id="run_stop">
 				<button id='run'>Run</button>
-			</div>
-			
-<!-- 			<div id="physics_mode">
-				<select id='mode'>
-					<option>Molecules motion in gas</option>
-					<option>Balls bouncing</option>
-				</select>
-			</div> -->
-			
+			</div>			
 			<canvas id="main-canvas"></canvas>
 		</div>
 

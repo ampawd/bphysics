@@ -1,4 +1,4 @@
-(function() {	
+;(function() {	
 	//	globals
 	var canvas = $('#main-canvas'),
 			ctx = canvas[0].getContext('2d'),
